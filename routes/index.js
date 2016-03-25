@@ -14,8 +14,9 @@ var Animal = require("../models/model.js");
 router.get('/', function(req, res) {
   
   var jsonData = {
-  	'name': 'node-express-api-boilerplate',
-  	'api-status':'OK'
+  	'name': 'virtualtour-server',
+    'version': '1.0',
+  	'status':'200'
   }
 
   // respond with json data
@@ -23,8 +24,8 @@ router.get('/', function(req, res) {
 });
 
 // simple route to show an HTML page
-router.get('/sample-page', function(req,res){
-  res.render('sample.html')
+router.get('/docs', function(req,res){
+  res.render('docs.html')
 })
 
 // /**

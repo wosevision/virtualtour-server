@@ -1,4 +1,5 @@
 var express = require('express');
+var cors = require('cors');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -7,7 +8,22 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var env = require('node-env-file');
 
+// init app
 var app = express();
+
+// ENABLE ALL CORS (all domains)
+app.use(cors());
+
+// PREFLIGHT COMPLEX REQUESTS (specific domain)
+// app.options('/location/:id', cors());
+// app.del('/products/:id', cors(), function(req, res, next){
+//   res.json({msg: 'This is CORS-enabled for all origins!'});
+// });
+
+// ENABLE ALL CORS (all domains)
+// app.get('/location/:id', cors({origin: 'http://uoit.ca'}), function(req, res, next){
+//   res.json({msg: 'This is CORS-enabled for only example.com.'});
+// });
 
 // if in development mode, load .env variables
 if (app.get("env") === "development") {
