@@ -15,12 +15,11 @@ router.get('/', function(req, res) {
   
   var jsonData = {
   	'name': 'virtualtour-server',
-    'version': 1.0,
-  	'status': 200
+    'version': 1.0
   }
 
   // respond with json data
-  res.json(jsonData)
+  res.status(200).json(jsonData)
 });
 
 // simple route to show an HTML page
@@ -80,20 +79,14 @@ router.post('/panoramas', function(req, res){
     panorama.save(function(err,data){
       // if err saving, respond back with error
       if (err){
-        var error = {status:400, message: 'Error saving panorama', error: err};
-        return res.json(error);
+        var error = {message: 'Error saving panorama', error: err};
+        return res.status(400).json(error);
       }
 
       console.log('Saved a new panorama!');
       console.log(data);
 
-      // now return the json data of the new animal
-      var jsonData = {
-        status: 200,
-        data: data
-      }
-
-      return res.json(jsonData);
+      return res.status(200).json(data);
 
     })  
 });
@@ -114,21 +107,15 @@ router.get('/panoramas/:id', function(req, res){
 
     // if err or no pano found, respond with error 
     if (err) {
-      var error = {status: 400, message: 'Error retrieving panorama', error: err};
-       return res.json(error);
+      var error = {message: 'Error retrieving panorama', error: err};
+       return res.status(400).json(error);
     }
     if (data == null) {
-      var error = {status: 404, message: 'Panorama not found'};
-       return res.json(error);
+      var error = {message: 'Panorama not found'};
+       return res.status(404).json(error);
     }
 
-    // otherwise respond with JSON data of the animal
-    var jsonData = {
-      status: 200,
-      data: data
-    }
-
-    return res.json(jsonData);
+    return res.status(200).json(data);
   
   })
 })
@@ -144,24 +131,17 @@ router.get('/panoramas', function(req, res){
   // mongoose method to find all, see http://mongoosejs.com/docs/api.html#model_Model.find
   Panorama.find(function(err, data){
 
-    // if err or no panos found, respond with error 
+    // if err or no pano found, respond with error 
     if (err) {
-      var error = {status: 400, message: 'Error retrieving panoramas', error: err};
-       return res.json(error);
+      var error = {message: 'Error retrieving panorama', error: err};
+       return res.status(400).json(error);
     }
     if (data == null) {
-      var error = {status: 404, message: 'No panoramas found'};
-       return res.json(error);
+      var error = {message: 'Panorama not found'};
+       return res.status(404).json(error);
     }
 
-    // otherwise, respond with the data 
-
-    var jsonData = {
-      status: 200,
-      data: data
-    } 
-
-    res.json(jsonData);
+    return res.status(200).json(data);
 
   })
 
