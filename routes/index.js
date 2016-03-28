@@ -106,7 +106,7 @@ router.get('/panoramas/:code', function(req, res){
   var requestedId = req.param('code');
 
   // mongoose method, see http://mongoosejs.com/docs/api.html#model_Model.findById
-  Panorama.findByCode(requestedId, function(err,data){
+  Panorama.findByCode(requestedId).populate('hotSpots').exec(function(err,data){
 
     // if err or no pano found, respond with error 
     if (err) {
