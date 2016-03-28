@@ -6,9 +6,9 @@ var Schema = mongoose.Schema;
 var PanoramaSchema = new Schema({
 	code: {type: String, required: true, unique: true, index: true },
   title: {type: String, required: true},
-  hfov: { type: Number, default: 100 },
-  pitch: { type: Number, default: 10 },
-  yaw: { type: Number, default: 50 },
+  hfov: Number,
+  pitch: Number,
+  yaw: Number,
   northOffset: { type: Number, default: 0 },
   type: { type: String, default: "multires" },
   multiRes: {

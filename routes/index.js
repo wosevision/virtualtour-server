@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-// our db model
+// our db models
 var Panorama = require("../models/panorama.js");
+var Hotspot = require("../models/hotspot.js");
 
 /**
  * GET '/'
@@ -71,10 +72,10 @@ router.post('/panoramas', function(req, res){
       }
     };
 
-    // create a new animal model instance, passing in the object
+    // create a new panorama model instance, passing in the object
     var panorama = new Panorama(panoObject);
 
-    // now, save that animal instance to the database
+    // now, save that panorama instance to the database
     // mongoose method, see http://mongoosejs.com/docs/api.html#model_Model-save    
     panorama.save(function(err,data){
       // if err saving, respond back with error
@@ -93,8 +94,8 @@ router.post('/panoramas', function(req, res){
 
 // /**
 //  * GET '/panoramas/:id'
-//  * Receives a GET request specifying the animal to get
-//  * @param  {String} req.param('id'). The animalId
+//  * Receives a GET request specifying the panorama to get
+//  * @param  {String} req.param('id'). The panoramaId
 //  * @return {Object} JSON
 //  */
 
@@ -121,8 +122,8 @@ router.get('/panoramas/:id', function(req, res){
 })
 
 // /**
-//  * GET '/api/get'
-//  * Receives a GET request to get all animal details
+//  * GET '/panoramas'
+//  * Receives a GET request to get all panorama details
 //  * @return {Object} JSON
 //  */
 
@@ -142,6 +143,41 @@ router.get('/panoramas', function(req, res){
     }
 
     return res.status(200).json(data);
+
+  })
+
+})
+
+/**
+ * GET '/api/delete/:id'
+ * Receives a GET request specifying the panorama to delete
+ * @param  {String} req.param('id'). The panoramaId
+ * @return {Object} JSON
+ */
+
+router.delete('/panoramas/:id', function(req, res){
+
+  var requestedId = req.param('id');
+
+  // Mongoose method to remove, http://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove
+  Panorama.findByIdAndRemove(requestedId,function(err, data){
+
+    // if err or no pano found, respond with error 
+    if (err) {
+      var error = {message: 'Error deleting panorama', error: err};
+       return res.status(400).json(error);
+    }
+    if (data == null) {
+      var error = {message: 'Panorama not found'};
+       return res.status(404).json(error);
+    }
+
+    // otherwise, respond back with success
+    var jsonData = {
+      message: 'Successfully deleted panorama ID ' + requestedId
+    }
+
+    res.status(200).json(jsonData);
 
   })
 
@@ -225,36 +261,6 @@ router.get('/panoramas', function(req, res){
 //       return res.json(jsonData);
 
 //     })
-
-// })
-
-/**
- * GET '/api/delete/:id'
- * Receives a GET request specifying the animal to delete
- * @param  {String} req.param('id'). The animalId
- * @return {Object} JSON
- */
-
-// router.get('/api/delete/:id', function(req, res){
-
-//   var requestedId = req.param('id');
-
-//   // Mongoose method to remove, http://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove
-//   Animal.findByIdAndRemove(requestedId,function(err, data){
-//     if(err || data == null){
-//       var error = {status:'ERROR', message: 'Could not find that animal to delete'};
-//       return res.json(error);
-//     }
-
-//     // otherwise, respond back with success
-//     var jsonData = {
-//       status: 'OK',
-//       message: 'Successfully deleted id ' + requestedId
-//     }
-
-//     res.json(jsonData);
-
-//   })
 
 // })
 
