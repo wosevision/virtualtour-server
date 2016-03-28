@@ -1,21 +1,137 @@
-// RESOURCE WITH LINKED SUB-RESOURCE
+// POI EXAMPLE
 {
-  "id": 711,
-  "manufacturer": "bmw",
-  "model": "X5",
-  "seats": 5,
-  "drivers": [
-		{
-			"id": "23",
-			"name": "Stefan Jauker",
-			"links": [
-				{
-					"rel": "self",
-					"href": "/api/v1/drivers/23"
-				}
-			]
-		}
-	]
+  "data": [{
+    "id": "pc",
+    "type": "pois",
+    "attributes": {
+      "name": "Polonsky Commons",
+      "desc": "<p>Named after UOIT's founding president, Dr. Gary Polonsky, this area is designed as a friendly outdoor gathering place for students. It features benches, trees sculptures and a reflecting pond.</p><p>The Polonsky Commons is at the heart of an attractive, pedestrian-friendly academic village, which fosters a strong sense of community and features outdoor pathways and meeting places, giving students plenty of opportunity for interaction and shared learning.</p><p>During the warmer months students can be found relaxing on park benches, or playing a game of soccer, Frisbee or football.</p><p>Deep below Polonsky Commons is UOIT's geothermal heating and cooling system, the largest in Canada and second largest in North America. The Borehole Thermal Energy System (BTES) is made up of 370 interconnected borehole tubes in a field nearly 200-metres deep. If laid from end to end, the amount of piping would stretch 75 kilometres. Each academic building is linked to a central plant through an underground tunnel.</p>",
+      "img": "thumbnails/pc.jpg",
+      "coords": [43.945127,-78.89683],
+      "coordsEntrance": [43.945127,-78.89683]
+    },
+    "links": {
+      "self": "v1/pois/pc"
+    },
+    "relationships": {
+      "panoramas": {
+        "links": {
+          "self": "v1/panoramas/pc",
+          "related": "v1/pois/pc/panoramas"
+        },
+        "data": { "type": "panoramas", "id": "pc" }
+      },
+      "hotspots": {
+        "links": {
+          "self": "v1/hotspots/pc",
+          "related": "v1/pois/pc/hotspots"
+        },
+        "data": [
+          { "type": "hotspots", "id": "5" },
+          { "type": "hotspots", "id": "12" },
+          { "type": "hotspots", "id": "22" },
+          { "type": "hotspots", "id": "24" }
+        ]
+      },
+      "paths": {
+        "links": {
+          "self": "v1/paths/pc",
+          "related": "v1/pois/pc/paths"
+        },
+        "data": [
+          { "type": "paths", "id": "_22deE3" },
+          { "type": "paths", "id": "_99xvD7" }
+        ]
+      }
+    }
+  }]
+}
+
+// PANORAMA
+{
+  "data": [{
+    "type": "panoramas",
+    "id": "pc",
+    "attributes": {
+      "title": "Polonsky Commons",
+      "hfov": 100,
+      "pitch": 10,
+      "yaw": 50,
+      "northOffset": 289,
+      "type": "multires",
+      "multiRes": {
+        "basePath": "./assets/img/panoramas/pc",
+          "path": "/%l/%s%y_%x",
+          "fallbackPath": "/fallback/%s",
+          "extension": "jpg",
+          "tileResolution": 512,
+          "maxLevel": 4,
+          "cubeResolution": 3144
+      }
+    },
+    "links": {
+      "self": "v1/panoramas/pc"
+    },
+    "relationships": {
+      "pois": {
+        "links": {
+          "self": "v1/pois/pc",
+          "related": "v1/panoramas/pc/pois"
+        },
+        "data": { "type": "pois", "id": "pc" }
+      },
+      "hotspots": {
+        "links": {
+          "self": "v1/hotspots/pc",
+          "related": "v1/pois/pc/hotspots"
+        },
+        "data": [
+          { "type": "hotspots", "id": "5" },
+          { "type": "hotspots", "id": "12" },
+          { "type": "hotspots", "id": "22" },
+          { "type": "hotspots", "id": "24" }
+        ]
+      }
+    }
+  }],
+  "included": [{
+    "type": "hotspots",
+    "id": "5",
+    "attributes": {
+      "pitch": -3.6501243721966894,
+      "yaw": 108.26748650582584,
+      "type": "info",
+      "text": "This is the Library, it's great"
+    },
+    "relationships": {
+      "pois": {
+        "data": { "type": "pois", "id": "lib" }
+      }
+    },
+    "links": {
+      "self": "v1/pois/lib"
+    }
+  }, {
+    "type": "hotspots",
+    "id": "12",
+    "attributes": {
+      "pitch": -11.6501244,
+      "yaw": 33.260582584,
+      "type": "scene",
+      "text": "We call this the UB for some reason",
+      "sceneId": "ub",
+      "targetPitch": -11.6501244,
+      "targetYaw": 33.260582584
+    },
+    "relationships": {
+      "panoramas": {
+        "data": { "type": "panoramas", "id": "ub" }
+      }
+    },
+    "links": {
+      "self": "v1/panoramas/ub"
+    }
+  }]
 }
 
 // RESOURCE WITH DEEP LINKED RELATIONSHIPS
