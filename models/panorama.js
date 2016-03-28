@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Hotspot = require("./hotspot.js");
 
 // See http://mongoosejs.com/docs/schematypes.html
 
@@ -19,7 +20,8 @@ var PanoramaSchema = new Schema({
       tileResolution: Number,
       maxLevel: Number,
       cubeResolution: Number
-  }
+  },
+  hotSpots: [{type: Schema.Types.ObjectId, ref: 'Hotspot'}]
 });
 
 PanoramaSchema.statics.findByCode = function (code, cb) {

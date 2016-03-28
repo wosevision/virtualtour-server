@@ -28,6 +28,8 @@ router.get('/docs', function(req,res){
   res.render('docs.html')
 })
 
+// ********** PANORAMA **********
+
 // /**
 //  * POST '/panoramas'
 //  * Receives a POST request of the new panorama config, saves to db, responds back
@@ -89,7 +91,7 @@ router.post('/panoramas', function(req, res){
 
       return res.status(200).json(data);
 
-    })  
+    });
 });
 
 // /**
@@ -99,9 +101,9 @@ router.post('/panoramas', function(req, res){
 //  * @return {Object} JSON
 //  */
 
-router.get('/panoramas/:id', function(req, res){
+router.get('/panoramas/:code', function(req, res){
 
-  var requestedId = req.param('id');
+  var requestedId = req.param('code');
 
   // mongoose method, see http://mongoosejs.com/docs/api.html#model_Model.findById
   Panorama.findByCode(requestedId, function(err,data){
@@ -118,8 +120,8 @@ router.get('/panoramas/:id', function(req, res){
 
     return res.status(200).json(data);
   
-  })
-})
+  });
+});
 
 // /**
 //  * GET '/panoramas'
@@ -130,7 +132,7 @@ router.get('/panoramas/:id', function(req, res){
 router.get('/panoramas', function(req, res){
 
   // mongoose method to find all, see http://mongoosejs.com/docs/api.html#model_Model.find
-  Panorama.find(function(err, data){
+  Panorama.find().populate('hotSpots').exec(function(err, data){
 
     // if err or no pano found, respond with error 
     if (err) {
@@ -144,9 +146,9 @@ router.get('/panoramas', function(req, res){
 
     return res.status(200).json(data);
 
-  })
+  });
 
-})
+});
 
 /**
  * GET '/api/delete/:id'
@@ -179,89 +181,179 @@ router.delete('/panoramas/:id', function(req, res){
 
     res.status(200).json(jsonData);
 
-  })
+  });
+
+});
+
+
+/**
+ * PUT '/panoramas/:id'
+ * Receives a PUT request with data of the panorama to update, updates db, responds back
+ * @param  {String} req.param('id'). The _id to update
+ * @param  {Object} req. An object containing the data to update
+ * @return {Object} JSON
+ */
+router.put('/panoramas/:id', function(req, res){
+
+   var requestedId = req.param('id');
+
+
+    console.log('the data to update is ' + JSON.stringify(req.body));
+
+    // now, update that animal
+    // mongoose method findByIdAndUpdate, see http://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate  
+    Panorama.findByIdAndUpdate(requestedId, req.body, function(err,data){
+
+      // if err or no pano found, respond with error 
+      if (err) {
+        var error = {message: 'Error retrieving panorama', error: err};
+         return res.status(400).json(error);
+      }
+
+      console.log('updated the panorama!');
+      console.log(data);
+
+      return res.status(200).json(data);
+
+    })
 
 })
 
+// ********** HOTSPOT **********
+
+router.post('/hotspots', function(req, res){
+
+    console.log(req.body);
+
+    // pull out the information from the req.body
+    var type = req.body.type;
+    var text = req.body.text;
+    var URL = req.body.url;
+    var sceneId = req.body.sceneId;
+    var targetPitch = req.body.targetPitch;
+    var targetYaw = req.body.targetYaw;
+    var pitch = req.body.pitch;
+    var yaw = req.body.yaw;
+
+    // hold all this data in an object
+    // this object should be structured the same way as your db model
+    var hotspotObject = {
+      type: type,
+      text: text,
+      URL: URL,
+      sceneId: sceneId,
+      targetPitch: targetPitch,
+      targetYaw: targetYaw,
+      pitch: pitch,
+      yaw: yaw
+    };
+
+    // create a new panorama model instance, passing in the object
+    var hotspot = new Hotspot(hotspotObject);
+
+    // now, save that panorama instance to the database
+    // mongoose method, see http://mongoosejs.com/docs/api.html#model_Model-save    
+    hotspot.save(function(err,data){
+      // if err saving, respond back with error
+      if (err){
+        var error = {message: 'Error saving hotspot', error: err};
+        return res.status(400).json(error);
+      }
+
+      console.log('Saved a new hotspot!');
+      console.log(data);
+
+      return res.status(200).json(data);
+
+    })  
+});
+
 // /**
-//  * POST '/api/update/:id'
-//  * Receives a POST request with data of the animal to update, updates db, responds back
-//  * @param  {String} req.param('id'). The animalId to update
-//  * @param  {Object} req. An object containing the different attributes of the Animal
+//  * GET '/hotspots'
+//  * Receives a GET request to get all hotspots ever
 //  * @return {Object} JSON
 //  */
 
-// router.post('/api/update/:id', function(req, res){
+router.get('/hotspots', function(req, res){
 
-//    var requestedId = req.param('id');
+  // mongoose method to find all, see http://mongoosejs.com/docs/api.html#model_Model.find
+  Hotspot.find(function(err, data){
 
-//    var dataToUpdate = {}; // a blank object of data to update
+    // if err or no pano found, respond with error 
+    if (err) {
+      var error = {message: 'Error retrieving hotspots', error: err};
+       return res.status(400).json(error);
+    }
+    if (data == null) {
+      var error = {message: 'Hotspots not found'};
+       return res.status(404).json(error);
+    }
 
-//     // pull out the information from the req.body and add it to the object to update
-//     var name, age, weight, color, url; 
+    return res.status(200).json(data);
 
-//     // we only want to update any field if it actually is contained within the req.body
-//     // otherwise, leave it alone.
-//     if(req.body.name) {
-//       name = req.body.name;
-//       // add to object that holds updated data
-//       dataToUpdate['name'] = name;
-//     }
-//     if(req.body.age) {
-//       age = req.body.age;
-//       // add to object that holds updated data
-//       dataToUpdate['age'] = age;
-//     }
-//     if(req.body.weight) {
-//       weight = req.body.weight;
-//       // add to object that holds updated data
-//       dataToUpdate['description'] = {};
-//       dataToUpdate['description']['weight'] = weight;
-//     }
-//     if(req.body.color) {
-//       color = req.body.color;
-//       // add to object that holds updated data
-//       if(!dataToUpdate['description']) dataToUpdate['description'] = {};
-//       dataToUpdate['description']['color'] = color;
-//     }
-//     if(req.body.url) {
-//       url = req.body.url;
-//       // add to object that holds updated data
-//       dataToUpdate['url'] = url;
-//     }
+  });
 
-//     var tags = []; // blank array to hold tags
-//     if(req.body.tags){
-//       tags = req.body.tags.split(","); // split string into array
-//       // add to object that holds updated data
-//       dataToUpdate['tags'] = tags;
-//     }
+});
+
+/**
+ * GET '/hotspots/:sceneId'
+ * Receives a GET request to return all hotspots in a given scene
+ * @return {Object} JSON
+ */
+router.get('/hotspots/:sceneId', function(req, res){
+
+  var requestedId = req.param('sceneId');
+
+  // mongoose method, see http://mongoosejs.com/docs/api.html#model_Model.findById
+  Hotspot.findByCode(requestedId, function(err,data){
+
+    // if err or no pano found, respond with error 
+    if (err) {
+      var error = {message: 'Error retrieving hotspot', error: err};
+       return res.status(400).json(error);
+    }
+    if (data == null) {
+      var error = {message: 'Hotspot not found'};
+       return res.status(404).json(error);
+    }
+
+    return res.status(200).json(data);
+  
+  });
+});
+
+/**
+ * PUT '/hotspots/:id'
+ * Receives a PUT request with data of the hotspot to update, updates db, responds back
+ * @param  {String} req.param('id'). The _id to update
+ * @param  {Object} req. An object containing the data to update
+ * @return {Object} JSON
+ */
+
+router.put('/hotspots/:id', function(req, res){
+
+   var requestedId = req.param('id');
 
 
-//     console.log('the data to update is ' + JSON.stringify(dataToUpdate));
+    console.log('the data to update is ' + JSON.stringify(req.body));
 
-//     // now, update that animal
-//     // mongoose method findByIdAndUpdate, see http://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate  
-//     Animal.findByIdAndUpdate(requestedId, dataToUpdate, function(err,data){
-//       // if err saving, respond back with error
-//       if (err){
-//         var error = {status:'ERROR', message: 'Error updating animal'};
-//         return res.json(error);
-//       }
+    // now, update that animal
+    // mongoose method findByIdAndUpdate, see http://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate  
+    Hotspot.findByIdAndUpdate(requestedId, req.body, function(err,data){
 
-//       console.log('updated the animal!');
-//       console.log(data);
+      // if err or no pano found, respond with error 
+      if (err) {
+        var error = {message: 'Error retrieving hotspot', error: err};
+         return res.status(400).json(error);
+      }
 
-//       // now return the json data of the new person
-//       var jsonData = {
-//         status: 'OK',
-//         animal: data
-//       }
+      console.log('updated the hotspot!');
+      console.log(data);
 
-//       return res.json(jsonData);
+      return res.status(200).json(data);
 
-//     })
+    })
 
-// })
+})
 
 module.exports = router;
