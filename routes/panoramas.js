@@ -74,10 +74,10 @@ module.exports = function(router) {
 	 */
 	router.get('/panoramas/:code', function(req, res){
 
-	  var requestedId = req.param('code');
+	  var code = req.param('code');
 
 	  // mongoose method, see http://mongoosejs.com/docs/api.html#model_Model.findById
-	  Panorama.findByCode(requestedId).populate('hotSpots').exec(function(err,data){
+	  Panorama.findByCode(code).populate('hotSpots').exec(function(err,data){
 
 	    // if err or no pano found, respond with error 
 	    if (err) {
@@ -171,7 +171,7 @@ module.exports = function(router) {
 
 	    // now, update that animal
 	    // mongoose method findByIdAndUpdate, see http://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate  
-	    Panorama.findByIdAndUpdate(requestedId, req.body, {new: true}, function(err,data){
+	    Panorama.findByIdAndUpdate(requestedId, req.body, function(err,data){
 
 	      // if err or no pano found, respond with error 
 	      if (err) {

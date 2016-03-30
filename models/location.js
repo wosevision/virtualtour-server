@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Panorama = require("./panorama.js");
 
 // See http://mongoosejs.com/docs/schematypes.html
 

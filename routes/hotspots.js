@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Hotspot = require("../models/hotspot.js");
+var Panorama = require("../models/panorama.js");
 
 module.exports = function(router) {
 
@@ -47,7 +48,9 @@ module.exports = function(router) {
           var error = {message: 'Error saving hotspot', error: err};
           return res.status(400).json(error);
         }
-
+        // if (type == "scene" && sceneId) {
+        //   Panorama.findOneAndUpdate({code: sceneId}, { $push: { links: data. } }, options, callback)
+        // }
         console.log('Saved a new hotspot!');
         console.log(data);
 

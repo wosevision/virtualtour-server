@@ -4,7 +4,8 @@ var Schema = mongoose.Schema;
 // See http://mongoosejs.com/docs/schematypes.html
 
 var HotspotSchema = new Schema({
-	type: { type: String, required: true},
+	parent: Schema.Types.ObjectId,
+	type: String,
 	text: String,
 	URL: String,
 	sceneId: String,
