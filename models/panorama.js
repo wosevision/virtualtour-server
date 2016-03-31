@@ -7,7 +7,8 @@ var Hotspot = require("./hotspot.js");
 var PanoramaSchema = new Schema({
 	code: {type: String, unique: true, index: true },
 	links: [Schema.Types.ObjectId],
-  title: String, 
+  title: String,
+  author: String,
   hfov: Number,
   pitch: Number,
   yaw: Number,
@@ -18,15 +19,27 @@ var PanoramaSchema = new Schema({
       path: { type: String, default: "/%l/%s%y_%x" },
       fallbackPath: { type: String, default: "/fallback/%s" },
       extension: { type: String, default: "jpg" },
-      tileResolution: Number,
-      maxLevel: Number,
+      tileResolution: {type: Number, default: 512},
+      maxLevel:  {type: Number, default: 4},
       cubeResolution: Number
   },
-  hotSpots: [{type: Schema.Types.ObjectId, ref: 'Hotspot'}]
+  hotSpots: [ {type: Schema.Types.ObjectId, ref: 'Hotspot'} ]
 });
 
 PanoramaSchema.statics.findByCode = function (code, cb) {
   return this.find({ code: code }, cb);
+}
+
+PanoramaSchema.statics.addHotspot = function (id, hotspot, cb) {
+  this.findById(id, function(err,data) {
+    // if err or no pano found, respond with error 
+    if (err) {
+      return err;
+    }
+    hotSpotsArray = data.hotSpots;
+    hotSpotsArray.push(hotspot);
+    return this.update({ hotSpots: hotSpotsArray }, cb);
+  });
 }
 
 // export 'Animal' model so we can interact with it in other files

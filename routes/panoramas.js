@@ -13,35 +13,21 @@ module.exports = function(router) {
 
 	    console.log(req.body);
 
-	    // pull out the information from the req.body
-	    var code = req.body.code;
-	    var title = req.body.title;
-	    var hfov = req.body.hfov;
-	    var pitch = req.body.pitch;
-	    var yaw = req.body.yaw;
-	    var northOffset = req.body.northOffset;
-	    var type = req.body.type;
-	    var basePath = req.body.basePath || "./assets/img/"+req.body.code;
-	    var extension = req.body.extension;
-	    var tileResolution = req.body.tileResolution;
-	    var maxLevel = req.body.maxLevel;
-	    var cubeResolution = req.body.cubeResolution;
-
 	    // hold all this data in an object
 	    // this object should be structured the same way as your db model
 	    var panoObject = {
-	      code: code,
-	      title: title,
-	      hfov: hfov,
-	      pitch: pitch,
-	      yaw: yaw,
-	      northOffset: northOffset,
-	      type: type,
+	      code: req.body.code || mongoose.Types.ObjectId(),
+	      title: req.body.title,
+	      hfov: req.body.hfov || 100,
+	      pitch: req.body.pitch || 10,
+	      yaw: req.body.yaw || 50,
+	      northOffset: req.body.northOffset || 0,
+	      type: req.body.type || "multires",
 	      multiRes: {
-	        basePath: basePath,
-	        extension: extension,
-	        tileResolution: tileResolution,
-	        maxLevel: maxLevel,
+	        basePath: req.body.basePath || "./assets/img/"+req.body.code,
+	        extension: extension || "jpg",
+	        tileResolution: tileResolution || 512,
+	        maxLevel: maxLevel || 4,
 	        cubeResolution: cubeResolution
 	      }
 	    };
@@ -156,13 +142,13 @@ module.exports = function(router) {
 
 
 	/**
-	 * PUT '/panoramas/:id'
-	 * Receives a PUT request with data of the pano to update, updates db, returns modified pano
+	 * POST '/panoramas/:id'
+	 * Receives a POST request with data of the pano to update, updates db, returns modified pano
 	 * @param  {String} req.param('id'). The mongodb _id to update
 	 * @param  {Object} req. An object containing the data to update
 	 * @return {Object} JSON
 	 */
-	router.put('/panoramas/:id', function(req, res){
+	router.post('/panoramas/:id', function(req, res){
 
 	   var requestedId = req.param('id');
 
@@ -171,7 +157,7 @@ module.exports = function(router) {
 
 	    // now, update that animal
 	    // mongoose method findByIdAndUpdate, see http://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate  
-	    Panorama.findByIdAndUpdate(requestedId, req.body, function(err,data){
+	    Panorama.findByIdAndUpdate(requestedId, req.body, {new:true}, function(err,data){
 
 	      // if err or no pano found, respond with error 
 	      if (err) {
