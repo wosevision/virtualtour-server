@@ -29,5 +29,8 @@ var panoramas = require("./panoramas.js")(router);
 // ********** HOTSPOT **********
 var hotspots = require("./hotspots.js")(router);
 
+// ********** LOCATION **********
+var locations = require("./locations.js")(router);
+
 
 module.exports = router;

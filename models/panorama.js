@@ -4,7 +4,7 @@ var Hotspot = require("./hotspot.js");
 
 // See http://mongoosejs.com/docs/schematypes.html
 
-var PanoramaSchema = new Schema({
+var panoramaSchema = new Schema({
 	code: {type: String, unique: true, index: true },
 	links: [Schema.Types.ObjectId],
   group: String,
@@ -26,11 +26,11 @@ var PanoramaSchema = new Schema({
   hotSpots: [ {type: Schema.Types.ObjectId, ref: 'Hotspot'} ]
 });
 
-PanoramaSchema.statics.findByCode = function (code, cb) {
+panoramaSchema.statics.findByCode = function (code, cb) {
   return this.find({ code: code }, cb);
 }
 
-PanoramaSchema.statics.addHotspot = function (id, hotspot, cb) {
+panoramaSchema.statics.addHotspot = function (id, hotspot, cb) {
   this.findById(id, function(err,data) {
     // if err or no pano found, respond with error 
     if (err) {
@@ -43,4 +43,4 @@ PanoramaSchema.statics.addHotspot = function (id, hotspot, cb) {
 }
 
 // export 'Animal' model so we can interact with it in other files
-module.exports = mongoose.model('Panorama',PanoramaSchema);
+module.exports = mongoose.model('Panorama',panoramaSchema);
