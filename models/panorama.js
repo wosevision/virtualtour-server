@@ -7,8 +7,8 @@ var Hotspot = require("./hotspot.js");
 var PanoramaSchema = new Schema({
 	code: {type: String, unique: true, index: true },
 	links: [Schema.Types.ObjectId],
+  group: String,
   title: String,
-  author: String,
   hfov: Number,
   pitch: Number,
   yaw: Number,

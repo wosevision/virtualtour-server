@@ -25,10 +25,10 @@ module.exports = function(router) {
 	      type: req.body.type || "multires",
 	      multiRes: {
 	        basePath: req.body.basePath || "./assets/img/"+req.body.code,
-	        extension: extension || "jpg",
-	        tileResolution: tileResolution || 512,
-	        maxLevel: maxLevel || 4,
-	        cubeResolution: cubeResolution
+	        extension: req.body.extension || "jpg",
+	        tileResolution: req.body.tileResolution || 512,
+	        maxLevel: req.body.maxLevel || 4,
+	        cubeResolution: req.body.cubeResolution
 	      }
 	    };
 

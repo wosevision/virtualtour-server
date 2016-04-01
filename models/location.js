@@ -13,7 +13,7 @@ var locationSchema = new Schema({
 	coords: [Number],
 	coordsEntrance: [Number],
 	icon: String,
-	panorama: {type: Schema.Types.ObjectId, ref: 'Panorama'}
+	scenes: {type: Schema.Types.ObjectId, ref: 'Panorama'}
 });
 
 // export 'Animal' model so we can interact with it in other files
