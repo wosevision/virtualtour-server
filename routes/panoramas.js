@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var Location = require("../models/location.js");
 var Panorama = require("../models/panorama.js");
 
 module.exports = function(router) {
@@ -53,29 +54,31 @@ module.exports = function(router) {
 	});
 
 	/**
-	 * GET '/panoramas/:id'
-	 * Receives a GET request specifying the panorama to get
+	 * GET '/panoramas/:location'
+	 * Receives a GET request specifying the location to get scenes from
 	 * @param  {String} req.param('id'). The panoramaId
 	 * @return {Object} JSON
 	 */
-	router.get('/panoramas/:code', function(req, res){
+	router.get('/panoramas/:location', function(req, res){
 
-	  var code = req.param('code');
+	  var code = req.param('location');
 
 	  // mongoose method, see http://mongoosejs.com/docs/api.html#model_Model.findById
-	  Panorama.findByCode(code).populate('hotSpots').exec(function(err,data){
+	  Location.findByCode(code).populate('scenes').exec(function(err,data){
 
-	    // if err or no pano found, respond with error 
-	    if (err) {
-	      var error = {message: 'Error retrieving panorama', error: err};
-	       return res.status(400).json(error);
-	    }
-	    if (data == null) {
-	      var error = {message: 'Panorama not found'};
-	       return res.status(404).json(error);
-	    }
+	  	Panorama.populate(data, [{path:'scenes.hotSpots', model:'Hotspot'}],function (err,data){
+		    // if err or no pano found, respond with error 
+		    if (err) {
+		      var error = {message: 'Error retrieving panorama', error: err};
+		       return res.status(400).json(error);
+		    }
+		    if (data == null) {
+		      var error = {message: 'Panorama not found'};
+		       return res.status(404).json(error);
+		    }
 
-	    return res.status(200).json(data);
+		    return res.status(200).json(data);
+	  	});
 	  
 	  });
 	});
