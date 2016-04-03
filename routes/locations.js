@@ -78,7 +78,7 @@ module.exports = function(router) {
     var location = req.param('location');
 
     // mongoose method, see http://mongoosejs.com/docs/api.html#model_Model.findById
-    Location.findByCode(location, function(err,data){
+    Location.findByCode(location).lean().populate('scenes', 'title code').exec(function(err,data){
 
       // if err or no pano found, respond with error 
       if (err) {
