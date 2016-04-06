@@ -18,7 +18,7 @@ module.exports = function(router) {
 	    // this object should be structured the same way as your db model
 	    var panoObject = {
 	      code: req.body.code || mongoose.Types.ObjectId(),
-	      group: req.body.group,
+	      location: req.body.location,
 	      title: req.body.title,
 	      hfov: req.body.hfov || 100,
 	      pitch: req.body.pitch || 10,
@@ -26,7 +26,7 @@ module.exports = function(router) {
 	      northOffset: req.body.northOffset || 0,
 	      type: req.body.type || 'multires',
 	      multiRes: {
-	        basePath: req.body.basePath || './assets/img/'+req.body.group+'/'+req.body.code,
+	        basePath: req.body.basePath || './assets/img/'+req.body.location+'/'+req.body.code,
 	        extension: req.body.extension || "jpg",
 	        tileResolution: req.body.tileResolution || 512,
 	        maxLevel: req.body.maxLevel || 4,

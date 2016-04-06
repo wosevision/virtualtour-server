@@ -6,7 +6,7 @@ var Hotspot = require("./hotspot.js");
 
 var panoramaSchema = new Schema({
 	code: {type: String, unique: true, index: true },
-  group: String,
+  location: String,
   title: String,
   hfov: Number,
   pitch: Number,
@@ -22,7 +22,8 @@ var panoramaSchema = new Schema({
       maxLevel:  {type: Number, default: 4},
       cubeResolution: Number
   },
-  hotSpots: [ {type: Schema.Types.ObjectId, ref: 'Hotspot'} ]
+  hotSpots: [ {type: Schema.Types.ObjectId, ref: 'Hotspot'} ],
+  hotSpotDebug: Boolean
 });
 
 panoramaSchema.statics.findByCode = function (code, cb) {

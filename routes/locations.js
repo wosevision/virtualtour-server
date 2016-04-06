@@ -114,12 +114,12 @@ module.exports = function(router) {
       Location.findByIdAndUpdate(requestedId, req.body, {new: true}, function(err,data){
         // if err or no pano found, respond with error 
         if (err) {
-          var error = {message: 'Error retrieving hotspot', error: err};
+          var error = {message: 'Error retrieving location', error: err};
            return res.status(400).json(error);
         }
         // if err or no pano found, respond with error 
         if (err) {
-          var error = {message: 'Error retrieving hotspot', error: err};
+          var error = {message: 'Error retrieving location', error: err};
            return res.status(400).json(error);
         }
 
