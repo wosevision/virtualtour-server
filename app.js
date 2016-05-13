@@ -1,15 +1,16 @@
-var express = require('express');
-var cors = require('cors');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var env = require('node-env-file');
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const env = require('node-env-file');
+const compression = require('compression');
 
 // init app
-var app = express();
+const app = express();
 
 // ENABLE ALL CORS (all domains)
 app.use(cors());
@@ -47,9 +48,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(compression())
 
 // our routes will be contained in routes/index.js
-var routes = require('./routes/index');
+const routes = require('./routes/index');
 app.use('/', routes);
 
 // catch 404 and forward to error handler

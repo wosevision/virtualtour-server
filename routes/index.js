@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 /**
  * GET '/'
@@ -24,13 +24,16 @@ router.get('/docs', function(req,res){
 })
 
 // ********** PANORAMA **********
-var panoramas = require("./panoramas.js")(router);
+const panoramas = require("./panoramas.js")(router);
 
 // ********** HOTSPOT **********
-var hotspots = require("./hotspots.js")(router);
+const hotspots = require("./hotspots.js")(router);
 
 // ********** LOCATION **********
-var locations = require("./locations.js")(router);
+const locations = require("./locations.js")(router);
+
+const entities = require('./entities');
+router.use('/entities', entities);
 
 
 module.exports = router;
