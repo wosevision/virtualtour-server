@@ -1,16 +1,15 @@
 module.exports = (req, res) => {
-  
-  req.entity.attrs.remove({ _id: req.param('attr') }, function(err, data){
 
-    // if err or no pano found, respond with error 
+  const a = req.attr;
+  req.attr.remove();
+  req.Entity.save(function(err) {
     if (err) {
       return res.status(400).json(err);
     }
-    // otherwise, respond back with success
     var message = {
-      message: 'Successfully removed entity ID ' + req.entity._id,
+      message: 'Successfully removed attribute',
       success: true,
-      removed: data
+      removed: a
     }
 
     res.status(200).json(message);

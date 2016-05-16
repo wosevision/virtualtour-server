@@ -2,7 +2,7 @@ var Entity = require("../../models/entity.js");
 
 module.exports = (req, res) => {
   
-  Entity.findByIdAndRemove(req.entity._id, function(err, data){
+  Entity.findByIdAndRemove(req.Entity._id, function(err, data){
 
     // if err or no pano found, respond with error 
     if (err) {
@@ -10,7 +10,7 @@ module.exports = (req, res) => {
     }
     // otherwise, respond back with success
     var message = {
-      message: 'Successfully removed entity ID ' + req.entity._id,
+      message: 'Successfully removed entity ID ' + req.Entity._id,
       success: true,
       removed: data
     }

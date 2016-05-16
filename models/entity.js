@@ -22,9 +22,10 @@ EntitySchema
 	.pre('remove', function(next) {
     // Remove all the assignment docs that reference the removed person.
     this.model('Entity').findAndUpdate({ entities: this._id}, {$pull: {entities: this._id}}, next);
+    this.model('Scene').findAndUpdate({ entities: this._id}, {$pull: {entities: this._id}}, next);
 	})
-	.pre('findOne', autoPopulate)
-	.pre('find', autoPopulate);
+	.pre('find', autoPopulate)
+	.pre('findOne', autoPopulate);
 
 // export 'Animal' model so we can interact with it in other files
 module.exports = mongoose.model('Entity',EntitySchema);

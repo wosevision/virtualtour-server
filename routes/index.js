@@ -23,17 +23,22 @@ router.get('/docs', function(req,res){
   res.render('docs.html')
 })
 
+// API V1
 // ********** PANORAMA **********
 const panoramas = require("./panoramas.js")(router);
-
-// ********** HOTSPOT **********
+// ********** HOTSPOT ***********
 const hotspots = require("./hotspots.js")(router);
-
 // ********** LOCATION **********
 const locations = require("./locations.js")(router);
 
+
+// API V2
+// ********** ENTITY **********
 const entities = require('./entities');
 router.use('/entities', entities);
+// ********** SCENE **********
+const scenes = require('./scenes');
+router.use('/scenes', scenes);
 
 
 module.exports = router;

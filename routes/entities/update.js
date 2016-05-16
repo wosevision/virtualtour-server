@@ -22,7 +22,7 @@ module.exports = (req, res) => {
     }
   }
 
-  Entity.findByIdAndUpdate(req.entity._id, entityObj, { new: true }, function(err, data) {
+  Entity.findByIdAndUpdate(req.Entity._id, entityObj, { new: true }, function(err, data) {
     if (err) {
       res.status(400).json(err);
     }

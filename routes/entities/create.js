@@ -27,8 +27,8 @@ module.exports = (req, res) => {
 
 
   entity.save(function(err, data) {
-    if (req.entity) {
-      const parent = req.entity;
+    if (req.Entity) {
+      const parent = req.Entity;
       parent.entities.push(entity._id)
       Entity.findByIdAndUpdate(parent._id, parent, function(e, d) {
         console.log('ENTITY added to: ', parent._id);

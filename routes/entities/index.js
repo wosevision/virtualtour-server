@@ -1,15 +1,13 @@
 const entities = require('express').Router();
-
-const attributes = require('./attributes');
-
 const findById = require('../../utils/findById');
+
 const all = require('./all');
 const create = require('./create');
 const remove = require('./remove');
 const single = require('./single');
 const update = require('./update');
 
-entities.param('id', findById('entity'));
+entities.param('id', findById('Entity'));
 
 entities.post('/', create);
 entities.post('/:id', create);
@@ -21,6 +19,7 @@ entities.get('/:id', single);
 
 entities.put('/:id', update);
 
+const attributes = require('./attributes');
 entities.use('/:id/attributes', attributes);
 
 module.exports = entities;
