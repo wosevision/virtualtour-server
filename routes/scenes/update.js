@@ -5,10 +5,15 @@ module.exports = (req, res) => {
   console.log('UPDATE SCENE request: ', req.body);
   const sceneObj = {};
 
+  if (req.body.code) {
+    sceneObj.code = req.body.code;
+  }
+  if (req.body.name) {
+    sceneObj.name = req.body.name;
+  }
   if (req.body.assets) {
     sceneObj.assets = req.body.assets;
   }
-
   if (req.body.entities) {
     sceneObj.entities = req.body.entities;
   }

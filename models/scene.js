@@ -8,12 +8,16 @@ const Schema = mongoose.Schema;
 // });
 
 const SceneSchema = new Schema({
-	code: { type: String, required: true },
+	code: { type: String, required: true, unique: true, index: true },
 	name: String,
 	assets: [{ type: Schema.Types.ObjectId, ref: 'Entity' }],
 	entities: [{ type: Schema.Types.ObjectId, ref: 'Entity' }],
 	script: Schema.Types.Mixed
 });
+
+SceneSchema.statics.findByCode = function (code, cb) {
+  return this.findOne({ code: code }, cb);
+}
 
 var autoPopulate = function(next) {
   this.populate('entities').populate('assets');

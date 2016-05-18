@@ -1,5 +1,5 @@
 const scenes = require('express').Router();
-const findById = require('../../utils/findById');
+const findByCode = require('../../utils/findByCode');
 
 const all = require('./all');
 const create = require('./create');
@@ -7,7 +7,7 @@ const remove = require('./remove');
 const single = require('./single');
 const update = require('./update');
 
-scenes.param('id', findById('Scene'));
+scenes.param('id', findByCode('Scene'));
 
 scenes.post('/', create);
 // scenes.post('/:id', create);

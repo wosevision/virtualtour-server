@@ -29,7 +29,7 @@ const panoramas = require("./panoramas.js")(router);
 // ********** HOTSPOT ***********
 const hotspots = require("./hotspots.js")(router);
 // ********** LOCATION **********
-const locations = require("./locations.js")(router);
+//const locations = require("./locations.js")(router);
 
 
 // API V2
@@ -39,6 +39,9 @@ router.use('/entities', entities);
 // ********** SCENE **********
 const scenes = require('./scenes');
 router.use('/scenes', scenes);
+// ********** SCENE **********
+const locations = require('./locations');
+router.use('/locations', locations);
 
 
 module.exports = router;
