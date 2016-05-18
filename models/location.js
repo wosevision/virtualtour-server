@@ -3,21 +3,27 @@ var Schema = mongoose.Schema;
 
 // See http://mongoosejs.com/docs/schematypes.html
 
-var locationSchema = new Schema({	
-	name: {type: String, required: true},
-	category: {type: String, required: true, index: true },
+var LocationSchema = new Schema({	
+	name: String,
 	label: String,
 	code: {type: String, required: true, unique: true, index: true },	
 	desc: String,
 	coords: [Number],
 	coordsEntrance: [Number],
-	icon: String,
-	scenes: [{type: Schema.Types.ObjectId, ref: 'Panorama'}]
+	downtown: {type: Boolean, required: true, default: false},
+	scenes: [{type: Schema.Types.ObjectId, ref: 'Scene'}]
 });
 
-locationSchema.statics.findByCode = function (code, cb) {
-  return this.find({ code: code }, cb);
+LocationSchema.statics.findByCode = function (code, cb) {
+  return this.findOne({ code: code }, cb);
 }
 
+var autoPopulate = function(next) {
+  this.populate('scenes');
+  next();
+};
+
+LocationSchema.pre('findOne', autoPopulate);
+
 // export 'Animal' model so we can interact with it in other files
-module.exports = mongoose.model('Location',locationSchema);
+module.exports = mongoose.model('Location', LocationSchema);
