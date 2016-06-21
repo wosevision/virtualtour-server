@@ -17,6 +17,12 @@ module.exports = (req, res) => {
   if (req.body.script) {
     scene.script = req.body.script;
   }
+  if (req.body.assets) {
+    scene.assets = req.body.assets;
+  }
+  if (req.body.entities) {
+    scene.entities = req.body.entities;
+  }
 
   scene.save(function(err, data) {
     if (err) {

@@ -1,43 +1,25 @@
-var Entity = require("../../models/entity.js");
+const Entity = require("../../models/entity.js");
+const tools = require("../../utils/tools.js");
+const colors = require('colors/safe');
 
 module.exports = (req, res) => {
 
-  console.log('CREATE ENTITY request: ', req.body);
-  const entityObj = {};
+  console.log(colors.bgMagenta.cyan('CREATE ENTITY request'), req.body);
 
-  if (req.body.type) {
-    entityObj.type = req.body.type;
-    console.log('TYPE added: ', entityObj.type);
-  }
-
-  const entity = new Entity(entityObj);
-
-  const attrs = [];
-  for (var attr in req.body) {      
-    if (req.body.hasOwnProperty(attr) && attr != 'type') attrs.push(attr);
-  }
-  attrsLength = attrs.length;
-  if (attrsLength > 0) {
-    entity.attrs = [];
-    for (var i=0; i<attrsLength; i++) {
-      entity.attrs.push({ prop: attrs[i], val: req.body[attrs[i]] });
-      console.log('ATTR added: ', attrs[i], req.body[attrs[i]]);
-    }
-  }
-
+  var entity = tools.buildEntity(req, true);
 
   entity.save(function(err, data) {
     if (req.Entity) {
       const parent = req.Entity;
       parent.entities.push(entity._id)
       Entity.findByIdAndUpdate(parent._id, parent, function(e, d) {
-        console.log('ENTITY added to: ', parent._id);
+        console.log(colors.bgBlack.cyan('ENTITY added to children of: %s'), parent._id);
       });
     }
     if (err) {
       res.status(400).json(err);
     }
-    console.log('ENTITY saved: ', data);
+    console.log(colors.rainbow('ENTITY SAVED!'), data);
     res.status(200).json(data);
   });
 
