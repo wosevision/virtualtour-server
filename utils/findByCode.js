@@ -11,7 +11,9 @@ module.exports = type => {
   			res.status(400).json(err);
     	}
 	   	if (data) {
+	   		//console.log(data);
 	      req[type] = data;
+	   		//console.log(req[type]);
 	      next();
 	    } else {
 	      res.status(404).send(`Invalid ${type} ID`);

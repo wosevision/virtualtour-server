@@ -7,16 +7,19 @@ const remove = require('./remove');
 const single = require('./single');
 const update = require('./update');
 
+const compression = require('compression');
+scenes.use(compression());
+
 scenes.param('id', findByCode('Scene'));
 
-scenes.post('/', create);
-// scenes.post('/:id', create);
+scenes.route('/')
+	.get(all)
+	.post(create);
 
-scenes.delete('/:id', remove);
-
-scenes.get('/', all);
-scenes.get('/:id', single);
-
-scenes.put('/:id', update);
+scenes.route('/:id')
+	//.post(create);
+	.delete(remove)
+	.get(single)
+	.put(update);
 
 module.exports = scenes;

@@ -7,19 +7,23 @@ const remove = require('./remove');
 const single = require('./single');
 const update = require('./update');
 
+const attributes = require('./attributes');
+
+const compression = require('compression');
+entities.use(compression());
+
 entities.param('id', findById('Entity'));
 
-entities.post('/', create);
-entities.post('/:id', create);
+entities.route('/')
+	.get(all)
+	.post(create);
 
-entities.delete('/:id', remove);
-
-entities.get('/', all);
-entities.get('/:id', single);
-
-entities.put('/:id', update);
-
-const attributes = require('./attributes');
+entities.route('/:id')
+	.get(single)
+	.post(create)
+	.delete(remove)
+	.put(update);
+	
 entities.use('/:id/attributes', attributes);
 
 module.exports = entities;

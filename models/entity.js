@@ -21,8 +21,9 @@ var autoPopulate = function(next) {
 EntitySchema
 	.pre('remove', function(next) {
     // Remove all the assignment docs that reference the removed person.
-    this.model('Entity').findAndUpdate({ entities: this._id}, {$pull: {entities: this._id}}, next);
-    this.model('Scene').findAndUpdate({ entities: this._id}, {$pull: {entities: this._id}}, next);
+    this.model('Entity').findAndUpdate({ entities: this._id}, {$pull: {entities: this._id}});
+    this.model('Scene').findAndUpdate({ entities: this._id}, {$pull: {entities: this._id}});
+    next();
 	})
 	.pre('find', autoPopulate)
 	.pre('findOne', autoPopulate);

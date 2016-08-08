@@ -7,17 +7,21 @@ const create = require('./create');
 const single = require('./single');
 const update = require('./update');
 
+const compression = require('compression');
+locations.use(compression());
+
 locations.param('id', findByCode('Location'));
 
-locations.post('/', create);
-// locations.post('/:id', create);
+locations.route('/')
+	//.get('north?', all)
+	.get(all)
+	.post(create);
 
-// locations.delete('/:id', remove);
 
-locations.get('/', all);
-locations.get('/north?', all);
-locations.get('/:id', single);
-
-locations.put('/:id', update);
+locations.route('/:id')
+	//.post(create)
+	//.delete(remove)
+	.get(single)
+	.put(update);
 
 module.exports = locations;

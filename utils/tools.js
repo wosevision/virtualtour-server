@@ -6,41 +6,23 @@ module.exports = {
 
   buildEntity: function (req, newObj) {
 
-  	var entity = (newObj === true) ? new Entity() : {};
+  	var entity = (newObj === true) ? new Entity() : {attrs: []};
   	var attrs = [];
 
-    for (var attr in req.body) {      
-      if (req.body.hasOwnProperty(attr)) {
+    Object.keys(req.body).forEach(function(attr) {
         switch (attr) {
           case 'type':
-            entity.type = req.body.type;
-            console.log(colors.bgBlack.cyan('TYPE added: %s'), req.body.type);
-            break;
           case 'entities':
-            entity.entities = req.body.entities;
-            console.log(colors.bgBlack.cyan('ENTITY added: %s'), req.body.entities);
+            entity[attr] = req.body[attr];
+            console.log(colors.bgBlack.magenta('>> %s added >> ') + colors.bgBlack.cyan('%s'), attr, req.body.type);
             break;
           default:
-            attrs.push(attr);
+          	newAttr = (req.body[attr]) ? { prop: attr, val: req.body[attr] } : { prop: attr };
+            entity.attrs.push(newAttr);
+            console.log(colors.bgBlack.magenta('>> attr added >> ') + colors.bgBlack.cyan('%s = %s'), attr, req.body[attr]);
             break;
         }
-      }
-    }
-
-    var attrsLength = attrs.length;
-    if (attrsLength > 0) {
-      entity.attrs = [];
-      for (var i=0; i<attrsLength; i++) {
-        var prop = attrs[i];
-        var val = req.body[attrs[i]];
-        if (val) {
-          entity.attrs.push({ prop: prop, val: val });
-        } else {
-          entity.attrs.push({ prop: prop });
-        }
-        console.log(colors.bgBlack.cyan('ATTR added: %s=%s'), attrs[i], req.body[attrs[i]]);
-      }
-    }
+    });
 
     return entity;
 
@@ -56,7 +38,7 @@ module.exports = {
         switch (attr) {
           case 'name':
             scene.name = req.body.name ? req.body.name : 'Scene ' + scene.code;
-            console.log(colors.bgBlack.cyan('NAME added: %s'), req.body.name);
+            console.log(colors.bgBlack.cyan('>> name added >> %s'), req.body.name);
             break;
           default:
             scene[attr] = req.body[attr];

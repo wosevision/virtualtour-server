@@ -1,6 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: false }));
+router.use(cookieParser());
+
+router.use(cors());
+
 /**
  * GET '/'
  * Default home route. Just relays a success message back.
@@ -21,27 +31,21 @@ router.get('/', function(req, res) {
 // simple route to show an HTML page
 router.get('/docs', function(req,res){
   res.render('docs.html')
-})
-
-// API V1
-// ********** PANORAMA **********
-const panoramas = require("./panoramas.js")(router);
-// ********** HOTSPOT ***********
-const hotspots = require("./hotspots.js")(router);
-// ********** LOCATION **********
-//const locations = require("./locations.js")(router);
-
+});
 
 // API V2
 // ********** ENTITY **********
 const entities = require('./entities');
 router.use('/entities', entities);
-// ********** SCENE **********
+// *********** SCENE ***********
 const scenes = require('./scenes');
 router.use('/scenes', scenes);
-// ********** SCENE **********
+// ********** LOCATION **********
 const locations = require('./locations');
 router.use('/locations', locations);
+// ********** PANORAMA **********
+const panoramas = require('./panoramas');
+router.use('/panoramas', panoramas);
 
 
 module.exports = router;

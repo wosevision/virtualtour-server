@@ -1,19 +1,24 @@
 const express = require('express');
-const cors = require('cors');
+const http = require('http');
+const io = require('socket.io')(http);
+
+// const cors = require('cors');
 const path = require('path');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const env = require('node-env-file');
-const compression = require('compression');
 
 // init app
 const app = express();
+// our routes will be contained in api/index.js
+const api = require('./api');
+const socket = require('./socket');
+
+io.on('connection', socket);
 
 // ENABLE ALL CORS (all domains)
-app.use(cors());
+//app.use(cors());
 
 // PREFLIGHT COMPLEX REQUESTS (specific domain)
 // app.options('/location/:id', cors());
@@ -34,25 +39,27 @@ if (app.get("env") === "development") {
 // connect to database
 app.db = mongoose.connect(process.env.MONGOLAB_URI);
 
-// view engine setup - this app uses Hogan-Express
-// https://github.com/vol4ok/hogan-express
-app.set('views', path.join(__dirname, 'views'));
+app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname, '../build'));
 app.set('view engine', 'html');
 app.set('layout','layout');
+
+// view engine setup - this app uses Hogan-Express
+// https://github.com/vol4ok/hogan-express
 app.engine('html', require('hogan-express'));;
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, '../', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(compression())
 
-// our routes will be contained in routes/index.js
-const routes = require('./routes/index');
-app.use('/', routes);
+app.use('/api', api); // API ROUTES
+//app.use('/panoramas', express.static(path.join(__dirname, '../build/images/panoramas'))); // PANO SERVE
+// app.use('/panoramas', panoramas);
+app.use(express.static(path.join(__dirname, '../build'))); // DEFAULT RENDER
+
+// app.get('*', function(req, res) {
+//   res.render('../build');
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -62,7 +69,9 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
-
+app.all(/.*\.(js|css|js\.map)$/i, function(req, res, next){
+  res.status(404).send('Not Found');
+});
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
@@ -85,5 +94,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
+http.createServer(app).listen(app.get('port'), function () {
+  console.log('Server listening on port ' + app.get('port'));
+});
 
 module.exports = app;
