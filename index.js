@@ -39,7 +39,7 @@ if (app.get("env") === "development") {
 // connect to database
 app.db = mongoose.connect(process.env.MONGOLAB_URI);
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8080);
 app.set('views', path.join(__dirname, '../build'));
 app.set('view engine', 'html');
 app.set('layout','layout');

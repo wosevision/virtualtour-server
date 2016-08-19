@@ -6,11 +6,11 @@ module.exports = (req, res) => {
   
   var sceneObj = {};
 
-  if (!req.body.code) {
-    return res.status(400).json({message: 'Please provide a code for the new scene'});
+  if (!req.body.code || !req.body.building) {
+    return res.status(400).json({message: 'Incomplete scene details!'});
   }
   Object.assign(sceneObj, req.body)
-  sceneObj.name = sceneObj.name || 'Scene ' + sceneObj.code;
+  sceneObj.name = sceneObj.name || ( sceneObj.building.toUpperCase() + ' ' + sceneObj.code.toUpperCase() );
 
   var scene = new Scene(sceneObj);
 

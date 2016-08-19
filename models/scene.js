@@ -8,15 +8,23 @@ const Schema = mongoose.Schema;
 // });
 
 const SceneSchema = new Schema({
-	code: { type: String, required: true, unique: true, index: true },
+	code: { type: String, required: true, index: true },
+	building: { type: String, required: true },
 	name: String,
 	assets: [{ type: Schema.Types.ObjectId, ref: 'Entity' }],
 	entities: [{ type: Schema.Types.ObjectId, ref: 'Entity' }],
 	script: Schema.Types.Mixed
 });
 
+// SceneSchema.add({ building: { type: String, required: true} });
+
 SceneSchema.statics.findByCode = function (code, cb) {
-  return this.findOne({ code: code }, cb);
+	var query = code.split('_');
+	if ( query[1] && query[1].match(/\d+/g) ) {
+  	return this.findOne({ building: query[0], code: query[1] }, cb);
+	} else {
+  	return this.find({ building: query[0] }, cb);
+	}
 }
 
 var autoPopulate = function(next) {

@@ -41,8 +41,8 @@ router.use('/entities', entities);
 const scenes = require('./scenes');
 router.use('/scenes', scenes);
 // ********** LOCATION **********
-const locations = require('./locations');
-router.use('/locations', locations);
+const buildings = require('./buildings');
+router.use('/buildings', buildings);
 // ********** PANORAMA **********
 const panoramas = require('./panoramas');
 router.use('/panoramas', panoramas);

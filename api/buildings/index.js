@@ -1,27 +1,27 @@
-const locations = require('express').Router();
+const buildings = require('express').Router();
 const findByCode = require('../../utils/findByCode');
 
 const all = require('./all');
 const create = require('./create');
-// const remove = require('./remove');
+const remove = require('./remove');
 const single = require('./single');
 const update = require('./update');
 
 const compression = require('compression');
-locations.use(compression());
+buildings.use(compression());
 
-locations.param('id', findByCode('Location'));
+buildings.param('id', findByCode('Building'));
 
-locations.route('/')
+buildings.route('/')
 	//.get('north?', all)
 	.get(all)
 	.post(create);
 
 
-locations.route('/:id')
+buildings.route('/:id')
 	//.post(create)
-	//.delete(remove)
+	.delete(remove)
 	.get(single)
 	.put(update);
 
-module.exports = locations;
+module.exports = buildings;

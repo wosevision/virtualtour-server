@@ -1,20 +1,20 @@
-var Location = require("../../models/location.js");
+var Building = require("../../models/building.js");
 
 module.exports = (req, res) => {
 
   console.log('UPDATE LOCATION request: ', req.body);
-  //console.log('UPDATE to object: ', req.Location);
+  //console.log('UPDATE to object: ', req.Building);
 
   // function ensureArray(val) {
   //   return Array.isArray(val) ? val : val.split(',');
   // }
 
-  var locationObj = {};
-  Object.assign(locationObj, req.body);
+  var buildingObj = {};
+  Object.assign(buildingObj, req.body);
   
-  //console.log('UPDATE LOCATION final: ', req.Location._id);
+  //console.log('UPDATE LOCATION final: ', req.Building._id);
 
-  Location.findByIdAndUpdate(req.Location._id, locationObj, { new: true }, function(err, data) {
+  Building.findByIdAndUpdate(req.Building._id, buildingObj, { new: true }, function(err, data) {
     if (err) {
       res.status(400).json(err);
     }
