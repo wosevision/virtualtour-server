@@ -1,6 +1,6 @@
 const express = require('express');
 const http = require('http');
-const io = require('socket.io')(http);
+// const io = require('socket.io')(http);
 
 // const cors = require('cors');
 const path = require('path');
@@ -13,9 +13,9 @@ const env = require('node-env-file');
 const app = express();
 // our routes will be contained in api/index.js
 const api = require('./api');
-const socket = require('./socket');
+// const socket = require('./socket');
 
-io.on('connection', socket);
+// io.on('connection', socket);
 
 // ENABLE ALL CORS (all domains)
 //app.use(cors());
