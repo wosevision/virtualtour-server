@@ -10,15 +10,22 @@ router.use(cors());
 const device = require('express-device');
 router.use(device.capture({ parseUserAgent: true }));
 
-const optimus = require('connect-image-optimus');
-// router.use(optimus(panos));
+// const optimus = require('connect-image-optimus');
+// router.use(optimus());
 
 const zlib = require('zlib');
 const compression = require('compression');
 router.use(compression({strategy: zlib.Z_HUFFMAN_ONLY }));
 
-router.use('/:building/:scene', function(req, res) {
-	var panoDir = '../../../panoramas',
+const panos = path.join(process.cwd(), '../panoramas');
+// console.log(panos);
+// router.use('/:building/:scene', express.static(panos))
+// 
+
+const webp = require('webp-middleware');
+
+router.use('/:building', function(req, res, next) {
+	var panoDir = panos,
 			// fileName = `${req.params.scene}`,
 			device = req.device.type,
 			dir = req.params.building,
@@ -47,10 +54,16 @@ router.use('/:building/:scene', function(req, res) {
   	size = 'large';
 	}
 
-	filePath = path.join(__dirname, panoDir, size, dir);
+	filePath = path.join(panoDir, size, dir);
+	req.url = filePath;
+	next();
+	//return webp(filePath, { cacheDir: '/' }).apply(this, arguments);
+});
+
+router.use('/:building', function(req, res, next) {
 
   var options = {
-    root: filePath,
+    //root: filePath,
     extensions: ['jpg', 'webp'],
     dotfiles: 'deny',
     headers: {
@@ -58,7 +71,8 @@ router.use('/:building/:scene', function(req, res) {
         'x-sent': true
     }
   };
-  res.sendFile(req.params.scene, options);
+  return express.static(req.filePath, options).apply(this, arguments);
+  //res.sendFile(req.url, options);
 });
 // router.use(express.static(panos));
 

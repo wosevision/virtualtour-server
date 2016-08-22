@@ -1,6 +1,5 @@
 const express = require('express');
 const http = require('http');
-// const io = require('socket.io')(http);
 
 // const cors = require('cors');
 const path = require('path');
@@ -13,8 +12,9 @@ const env = require('node-env-file');
 const app = express();
 // our routes will be contained in api/index.js
 const api = require('./api');
-// const socket = require('./socket');
 
+// const io = require('socket.io')(http);
+// const socket = require('./socket');
 // io.on('connection', socket);
 
 // ENABLE ALL CORS (all domains)
@@ -39,7 +39,7 @@ if (app.get("env") === "development") {
 // connect to database
 app.db = mongoose.connect(process.env.MONGOLAB_URI);
 
-app.set('port', 3000);
+app.set('port', process.env.PORT || 8080);
 app.set('views', path.join(__dirname, '../build'));
 app.set('view engine', 'html');
 app.set('layout','layout');
